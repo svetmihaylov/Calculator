@@ -24,70 +24,62 @@
 
           <div class="sidebar-controls">
             <div class="field">
-              <label>Language</label>
+              <label data-i18n="languageLabel">Language</label>
               <div class="select-wrap">
-                <select>
-                  <option selected>English</option>
-                  <option>Español</option>
-                  <option>Français</option>
+                <select id="languageSelect">
+                  <option value="en" selected>English</option>
+                  <option value="es">Español</option>
+                  <option value="fr">Français</option>
                 </select>
               </div>
             </div>
 
             <div class="field">
-              <label>Time Unit</label>
+              <label data-i18n="timeUnitLabel">Time Unit</label>
               <div class="select-wrap">
                 <select>
-                  <option selected>Week</option>
-                  <option>Month</option>
-                  <option>Day</option>
+                  <option value="week" selected data-i18n="week">Week</option>
+                  <option value="month" data-i18n="month">Month</option>
+                  <option value="day" data-i18n="day">Day</option>
                 </select>
               </div>
             </div>
 
             <div class="field">
-              <label>Number of Periods</label>
+              <label data-i18n="periodsLabel">Number of Periods</label>
               <input type="number" value="12" min="1" max="24" />
             </div>
 
             <div class="field">
-              <label>Currency</label>
+              <label data-i18n="currencyLabel">Currency</label>
               <div class="select-wrap">
                 <select>
-                  <option selected>USD</option>
-                  <option>EUR</option>
-                  <option>GBP</option>
+                  <option value="usd" selected data-i18n="usd">USD</option>
+                  <option value="eur" data-i18n="eur">EUR</option>
+                  <option value="gbp" data-i18n="gbp">GBP</option>
                 </select>
               </div>
             </div>
           </div>
 
           <div class="widget-cta">
-            <p>
-              Would you like to leverage a widget like this one in your campaigns?
-            </p>
-            <p>
-              Widget like this are always valued by customers. They are a great way to
-              stimulate engagement and get more people to take action.
-            </p>
-            <p>
-              It's also a great way to generate leads. Click here to learn more about
-              how to get one.
-            </p>
-            <button>Learn more</button>
+            <p data-i18n="widgetText1">Would you like to leverage a widget like this one in your campaigns?</p>
+            <p data-i18n="widgetText2">Widget like this are always valued by customers. They are a great way to stimulate engagement and get more people to take action.</p>
+            <p data-i18n="widgetText3">It's also a great way to generate leads. Click here to learn more about how to get one.</p>
+            <button data-i18n="learnMore">Learn more</button>
           </div>
 
-          <div class="footer-tag">Logo: Designed by Freepik</div>
+          <div class="footer-tag" data-i18n="logoCredit">Logo: Designed by Freepik</div>
         </aside>
 
         <main class="main-panel">
           <header class="topbar">
             <div class="metric-labels">
-              <span>Metrics Over Time</span>
+              <span data-i18n="metricsOverTime">Metrics Over Time</span>
             </div>
             <div class="mini-stats">
-              <div><span class="dot green"></span> Profit</div>
-              <div><span class="dot blue"></span> Customers</div>
+              <div><span class="dot green"></span> <span data-i18n="profit">Profit</span></div>
+              <div><span class="dot blue"></span> <span data-i18n="customers">Customers</span></div>
             </div>
           </header>
 
@@ -97,11 +89,11 @@
 
           <section class="slider-sections">
             <div class="slider-group">
-              <h3 class="group-title">Revenue</h3>
+              <h3 class="group-title" data-i18n="revenue">Revenue</h3>
               <div class="sliders-grid">
                 <div class="metric-card">
                   <div class="metric-header">
-                    <span>Launching Customers</span>
+                    <span data-i18n="launchingCustomers">Launching Customers</span>
                     <b class="metric-value" id="launchingCustomersValue">119</b>
                   </div>
                   <div class="slider-wrap">
@@ -111,7 +103,7 @@
 
                 <div class="metric-card">
                   <div class="metric-header">
-                    <span>Revenue Per Conversion</span>
+                    <span data-i18n="revenuePerConversion">Revenue Per Conversion</span>
                     <b class="metric-value" id="revenuePerConversionValue">119</b>
                   </div>
                   <div class="slider-wrap">
@@ -121,7 +113,7 @@
 
                 <div class="metric-card">
                   <div class="metric-header">
-                    <span>Customer Growth Rate</span>
+                    <span data-i18n="customerGrowthRate">Customer Growth Rate</span>
                     <b class="metric-value" id="customerGrowthRateValue">0.15</b>
                   </div>
                   <div class="slider-wrap">
@@ -131,7 +123,7 @@
 
                 <div class="metric-card">
                   <div class="metric-header">
-                    <span>Average Response Rate</span>
+                    <span data-i18n="averageResponseRate">Average Response Rate</span>
                     <b class="metric-value" id="averageResponseRateValue">0.20</b>
                   </div>
                   <div class="slider-wrap">
@@ -156,7 +148,7 @@
 
                 <div class="metric-card">
                   <div class="metric-header">
-                    <span>Variable Cost</span>
+                    <span data-i18n="variableCost">Variable Cost</span>
                     <b class="metric-value" id="variableCostValue">10.8</b>
                   </div>
                   <div class="slider-wrap">
@@ -166,7 +158,7 @@
 
                 <div class="metric-card">
                   <div class="metric-header">
-                    <span>Fixed Costs</span>
+                    <span data-i18n="fixedCosts">Fixed Costs</span>
                     <b class="metric-value" id="fixedCostsValue">175</b>
                   </div>
                   <div class="slider-wrap">
@@ -176,7 +168,7 @@
 
                 <div class="metric-card">
                   <div class="metric-header">
-                    <span>Starting Cost</span>
+                    <span data-i18n="startingCost">Starting Cost</span>
                     <b class="metric-value" id="startingCostValue">0</b>
                   </div>
                   <div class="slider-wrap">
@@ -190,47 +182,47 @@
 
         <aside class="summary-panel">
           <div class="summary-header">
-            <div class="summary-title">Campaign Summary</div>
+            <div class="summary-title" data-i18n="campaignSummary">Campaign Summary</div>
           </div>
 
           <div class="summary-box">
-            <p class="summary-label">Profit in week #1</p>
+            <p class="summary-label" data-i18n="profitWeek">Profit in week #1</p>
             <div class="profit-total">$30,865.61</div>
           </div>
 
           <div class="summary-grid">
             <div class="summary-row">
-              <span>At week #12:</span>
+              <span data-i18n="atWeek">At week #12:</span>
             </div>
             <div class="summary-row">
-              <span>Customers:</span>
+              <span data-i18n="customersShort">Customers:</span>
               <strong id="customersSummary">3052</strong>
             </div>
             <div class="summary-row">
-              <span>Revenue:</span>
+              <span data-i18n="revenueShort">Revenue:</span>
               <strong id="revenueSummary">$39,558.73</strong>
             </div>
             <div class="summary-row">
-              <span>Expenses:</span>
+              <span data-i18n="expensesShort">Expenses:</span>
               <strong id="expensesSummary">$9,693.12</strong>
             </div>
             <div class="summary-row final-total">
-              <span>Total Profit</span>
+              <span data-i18n="totalProfit">Total Profit</span>
               <strong id="profitSummary">$30,865.61</strong>
             </div>
             <div class="summary-row">
-              <span>Average Retention</span>
+              <span data-i18n="avgRetention">Average Retention</span>
               <strong id="retentionSummary">50.00%</strong>
             </div>
             <div class="summary-row">
-              <span>Return on Investment</span>
+              <span data-i18n="roi">Return on Investment</span>
               <strong id="roiSummary">255.06%</strong>
             </div>
           </div>
 
           <div class="export-actions">
-            <button class="action-btn">Export Data</button>
-            <button class="action-btn secondary">Load Data</button>
+            <button class="action-btn" data-i18n="exportData">Export Data</button>
+            <button class="action-btn secondary" data-i18n="loadData">Load Data</button>
           </div>
 
           <div class="socials">
@@ -243,6 +235,12 @@
       </div>
     </div>
 
+    <script src="lang/en.js"></script>
+    <script src="lang/es.js"></script>
+    <script src="lang/fr.js"></script>
+    <script src="lang/en.js"></script>
+    <script src="lang/es.js"></script>
+    <script src="lang/fr.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
