@@ -95,84 +95,94 @@
             <canvas id="performanceChart" width="760" height="270"></canvas>
           </div>
 
-          <section class="sliders-grid">
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Launching Customers</span>
-                <b id="launchingCustomersValue">119</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="500" step="1" value="119" data-key="launchingCustomers" />
+          <section class="slider-sections">
+            <div class="slider-group">
+              <h3 class="group-title">Revenue</h3>
+              <div class="sliders-grid">
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Launching Customers</span>
+                    <b class="metric-value" id="launchingCustomersValue">119</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="500" step="1" value="119" data-key="launchingCustomers" />
+                  </div>
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Revenue Per Conversion</span>
+                    <b class="metric-value" id="revenuePerConversionValue">119</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="1000" step="1" value="119" data-key="revenuePerConversion" />
+                  </div>
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Customer Growth Rate</span>
+                    <b class="metric-value" id="customerGrowthRateValue">0.15</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="1" step="0.01" value="0.15" data-key="customerGrowthRate" />
+                  </div>
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Average Response Rate</span>
+                    <b class="metric-value" id="averageResponseRateValue">0.20</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="1" step="0.01" value="0.2" data-key="averageResponseRate" />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Revenue Per Conversion</span>
-                <b id="revenuePerConversionValue">119</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="1000" step="1" value="119" data-key="revenuePerConversion" />
-              </div>
-            </div>
+            <div class="slider-group">
+              <h3 class="group-title">Expenses</h3>
+              <div class="sliders-grid">
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Customer Churn Rate</span>
+                    <b class="metric-value" id="customerChurnRateValue">0.02</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="0.5" step="0.01" value="0.02" data-key="customerChurnRate" />
+                  </div>
+                </div>
 
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Customer Growth Rate</span>
-                <b id="customerGrowthRateValue">0.15</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="1" step="0.01" value="0.15" data-key="customerGrowthRate" />
-              </div>
-            </div>
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Variable Cost</span>
+                    <b class="metric-value" id="variableCostValue">10.8</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="30" step="0.1" value="10.8" data-key="variableCost" />
+                  </div>
+                </div>
 
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Average Response Rate</span>
-                <b id="averageResponseRateValue">0.20</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="1" step="0.01" value="0.2" data-key="averageResponseRate" />
-              </div>
-            </div>
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Fixed Costs</span>
+                    <b class="metric-value" id="fixedCostsValue">175</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="1000" step="1" value="175" data-key="fixedCosts" />
+                  </div>
+                </div>
 
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Customer Churn Rate</span>
-                <b id="customerChurnRateValue">0.02</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="0.5" step="0.01" value="0.02" data-key="customerChurnRate" />
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Variable Cost</span>
-                <b id="variableCostValue">10.8</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="30" step="0.1" value="10.8" data-key="variableCost" />
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Fixed Costs</span>
-                <b id="fixedCostsValue">175</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="1000" step="1" value="175" data-key="fixedCosts" />
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-header">
-                <span>Starting Cost</span>
-                <b id="startingCostValue">0</b>
-              </div>
-              <div class="slider-wrap">
-                <input type="range" min="0" max="1000" step="1" value="0" data-key="startingCost" />
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Starting Cost</span>
+                    <b class="metric-value" id="startingCostValue">0</b>
+                  </div>
+                  <div class="slider-wrap">
+                    <input type="range" min="0" max="1000" step="1" value="0" data-key="startingCost" />
+                  </div>
+                </div>
               </div>
             </div>
           </section>
