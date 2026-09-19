@@ -62,20 +62,6 @@ currencySelect?.addEventListener('change', () => {
   updateSummary();
 });
 
-function updateTimeUnitText() {
-  const unit = timeUnitSelect ? timeUnitSelect.value : 'week';
-  const label = document.getElementById('profitTimeLabel');
-  const atLabel = document.getElementById('atTimeLabel');
-
-  if (label) {
-    label.textContent = `Profit in ${unit} #1`;
-  }
-
-  if (atLabel) {
-    atLabel.textContent = `At ${unit} #12:`;
-  }
-}
-
 function getXAxisLabel(unit, index) {
   const locale = getCurrentLocale();
   const pack = window.langPack && window.langPack[locale] ? window.langPack[locale] : window.langPack.en;
