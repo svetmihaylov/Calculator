@@ -47,7 +47,7 @@
 
             <div class="field">
               <label data-i18n="periodsLabel">Number of Periods</label>
-              <input type="number" value="12" min="1" max="24" />
+              <input id="periodsInput" type="number" value="12" min="1" max="24" />
             </div>
 
             <div class="field">
@@ -186,13 +186,13 @@
           </div>
 
           <div class="summary-box">
-            <p class="summary-label" id="profitTimeLabel" data-i18n="profitWeek">Profit in week #1</p>
-            <div class="profit-total" id="headlineProfitTotal">$30,865.61</div>
+            <p class="summary-label" id="firstPeriodLabel" data-i18n="profitWeek">Profit in week #1</p>
+            <div class="profit-total" id="firstPeriodProfit">$0.00</div>
           </div>
 
           <div class="summary-grid">
             <div class="summary-row">
-              <span id="atTimeLabel" data-i18n="atWeek">At week #12:</span>
+              <span id="finalPeriodLabel" data-i18n="atWeek">At week #12:</span>
             </div>
             <div class="summary-row">
               <span data-i18n="customersShort">Customers:</span>
@@ -221,8 +221,9 @@
           </div>
 
           <div class="export-actions">
-            <button class="action-btn" data-i18n="exportData">Export Data</button>
-            <button class="action-btn secondary" data-i18n="loadData">Load Data</button>
+            <button id="exportDataButton" class="action-btn" data-i18n="exportData">Export Data</button>
+            <button id="loadDataButton" class="action-btn secondary" data-i18n="loadData">Load Data</button>
+            <input id="loadDataInput" type="file" accept="application/json" hidden />
           </div>
 
           <div class="socials">

@@ -233,6 +233,8 @@ select {
   border-radius: 14px;
   padding: 8px 6px 0;
   height: 300px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 #performanceChart {
