@@ -54,7 +54,6 @@ languageSelect?.addEventListener('change', (event) => {
 });
 
 timeUnitSelect?.addEventListener('change', () => {
-  updateTimeUnitText();
   renderChart();
 });
 
@@ -87,7 +86,6 @@ const refs = {
   customersSummary: document.getElementById('customersSummary'),
   revenueSummary: document.getElementById('revenueSummary'),
   expensesSummary: document.getElementById('expensesSummary'),
-  headlineProfitTotal: document.getElementById('headlineProfitTotal'),
   profitSummary: document.getElementById('profitSummary'),
   retentionSummary: document.getElementById('retentionSummary'),
   roiSummary: document.getElementById('roiSummary')
@@ -135,7 +133,6 @@ function updateSummary() {
   refs.customersSummary.textContent = customers.toLocaleString('en-US');
   refs.revenueSummary.textContent = formatMoney(revenue);
   refs.expensesSummary.textContent = formatMoney(expenses);
-  refs.headlineProfitTotal.textContent = formatMoney(profit);
   refs.profitSummary.textContent = formatMoney(profit);
   refs.retentionSummary.textContent = formatPercent(retention);
   refs.roiSummary.textContent = formatPercent(roi / 100);
@@ -287,7 +284,6 @@ function initSliders() {
 
 window.addEventListener('resize', renderChart);
 applyTranslations(getCurrentLocale());
-updateTimeUnitText();
 initSliders();
 updateSummary();
 renderChart();
