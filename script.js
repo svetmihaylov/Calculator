@@ -12,6 +12,7 @@ const state = {
 const languageSelect = document.getElementById('languageSelect');
 const timeUnitSelect = document.getElementById('timeUnitSelect');
 const currencySelect = document.getElementById('currencySelect');
+const periodsInput = document.getElementById('periodsInput');
 
 const currencyRates = {
   USD: 1,
@@ -51,14 +52,23 @@ function applyTranslations(locale) {
 
 languageSelect?.addEventListener('change', (event) => {
   applyTranslations(event.target.value);
+  updateSummary();
+  renderChart();
 });
 
 timeUnitSelect?.addEventListener('change', () => {
+  updateSummary();
   renderChart();
 });
 
 currencySelect?.addEventListener('change', () => {
   updateSummary();
+  renderChart();
+});
+
+periodsInput?.addEventListener('input', () => {
+  updateSummary();
+  renderChart();
 });
 
 function getXAxisLabel(unit, index) {
@@ -87,6 +97,9 @@ const refs = {
   revenueSummary: document.getElementById('revenueSummary'),
   expensesSummary: document.getElementById('expensesSummary'),
   profitSummary: document.getElementById('profitSummary'),
+  firstPeriodLabel: document.getElementById('firstPeriodLabel'),
+  firstPeriodProfit: document.getElementById('firstPeriodProfit'),
+  finalPeriodLabel: document.getElementById('finalPeriodLabel'),
   retentionSummary: document.getElementById('retentionSummary'),
   roiSummary: document.getElementById('roiSummary')
 };
@@ -119,18 +132,75 @@ function setSliderFill(slider) {
   slider.style.setProperty('--percent', `${percent}%`);
 }
 
-function updateSummary() {
-  const customers = Math.round(
-    state.launchingCustomers * Math.pow(1 + state.customerGrowthRate, 12)
-  );
+function getPeriodSettings() {
+  const unit = timeUnitSelect?.value || 'week';
+  const periods = Math.min(24, Math.max(1, Number(periodsInput?.value) || 1));
+  const weeksPerPeriod = { day: 1 / 7, week: 1, month: 52 / 12 }[unit] || 1;
 
-  const revenue = customers * state.revenuePerConversion;
-  const expenses = state.fixedCosts + state.startingCost + customers * state.variableCost;
+  return { unit, periods, weeksPerPeriod };
+}
+
+function calculateSalesSeries() {
+  const { periods, weeksPerPeriod } = getPeriodSettings();
+  const values = [];
+
+  for (let period = 1; period <= periods; period += 1) {
+    const customers = state.launchingCustomers * Math.pow(
+      1 + state.customerGrowthRate,
+      period * weeksPerPeriod
+    );
+    const revenue = customers * state.averageResponseRate * state.revenuePerConversion * weeksPerPeriod;
+    const operatingCosts = (state.fixedCosts + customers * state.variableCost) * weeksPerPeriod;
+    const startingCost = period === 1 ? state.startingCost : 0;
+
+    values.push({
+      period,
+      customers,
+      revenue,
+      expenses: operatingCosts + startingCost,
+      profit: revenue - operatingCosts - startingCost
+    });
+  }
+
+  return values;
+}
+
+function getPeriodLabel(key, unit, period) {
+  const locale = getCurrentLocale();
+  const pack = window.langPack && window.langPack[locale] ? window.langPack[locale] : window.langPack.en;
+  const unitLabel = (pack[unit] || unit).toLowerCase();
+  const template = pack[key] || `${key === 'profitWeek' ? 'Profit in' : 'At'} ${unitLabel} #${period}`;
+
+  const label = template
+    .replace(/week|semana|semaine/gi, unitLabel)
+    .replace(/#\d+/, `#${period}`);
+
+  if (locale === 'es') {
+    return label.replace(/la mes|la día/gi, (match) => match.replace('la', 'el'));
+  }
+
+  if (locale === 'fr') {
+    return label.replace(/la mois|la jour/gi, (match) => match.replace('la', 'le'));
+  }
+
+  return label;
+}
+
+function updateSummary() {
+  const values = calculateSalesSeries();
+  const firstPeriod = values[0];
+  const finalPeriod = values[values.length - 1];
+  const revenue = values.reduce((total, value) => total + value.revenue, 0);
+  const expenses = values.reduce((total, value) => total + value.expenses, 0);
   const profit = revenue - expenses;
-  const retention = Math.max(0, 1 - state.customerChurnRate);
+  const { unit, periods, weeksPerPeriod } = getPeriodSettings();
+  const retention = Math.max(0, Math.pow(1 - state.customerChurnRate, periods * weeksPerPeriod));
   const roi = (profit / Math.max(1, expenses)) * 100;
 
-  refs.customersSummary.textContent = customers.toLocaleString('en-US');
+  refs.firstPeriodLabel.textContent = getPeriodLabel('profitWeek', unit, 1);
+  refs.firstPeriodProfit.textContent = formatMoney(firstPeriod.profit);
+  refs.finalPeriodLabel.textContent = getPeriodLabel('atWeek', unit, periods);
+  refs.customersSummary.textContent = Math.round(finalPeriod.customers).toLocaleString('en-US');
   refs.revenueSummary.textContent = formatMoney(revenue);
   refs.expensesSummary.textContent = formatMoney(expenses);
   refs.profitSummary.textContent = formatMoney(profit);
@@ -138,32 +208,16 @@ function updateSummary() {
   refs.roiSummary.textContent = formatPercent(roi / 100);
 }
 
-function calculateSalesSeries() {
-  const weeks = 12;
-  const values = [];
-
-  for (let i = 1; i <= weeks; i += 1) {
-    const customers = state.launchingCustomers * Math.pow(1 + state.customerGrowthRate, i);
-    const revenue = customers * state.revenuePerConversion;
-    const operatingCosts = state.fixedCosts + customers * state.variableCost;
-    const profit = revenue - operatingCosts;
-    values.push({
-      week: i,
-      customers,
-      revenue,
-      profit
-    });
-  }
-
-  return values;
-}
-
 function renderChart() {
   const values = calculateSalesSeries();
   const width = chartCanvas.width;
   const height = chartCanvas.height;
   const padding = { top: 15, right: 12, bottom: 28, left: 28 };
-  const unit = timeUnitSelect ? timeUnitSelect.value : 'week';
+  const { unit } = getPeriodSettings();
+  const plotWidth = width - padding.left - padding.right;
+  const getPointX = (index) => padding.left + (
+    values.length === 1 ? plotWidth / 2 : (plotWidth / (values.length - 1)) * index
+  );
 
   ctx.clearRect(0, 0, width, height);
 
@@ -178,8 +232,8 @@ function renderChart() {
     ctx.stroke();
   }
 
-  for (let i = 0; i <= 12; i += 1) {
-    const x = padding.left + ((width - padding.left - padding.right) / 12) * i;
+  for (let i = 0; i <= values.length; i += 1) {
+    const x = padding.left + ((width - padding.left - padding.right) / values.length) * i;
     ctx.beginPath();
     ctx.moveTo(x, padding.top);
     ctx.lineTo(x, height - padding.bottom);
@@ -197,7 +251,7 @@ function renderChart() {
   ctx.lineCap = 'round';
 
   values.forEach((val, index) => {
-    const x = padding.left + ((width - padding.left - padding.right) / (values.length - 1)) * index;
+    const x = getPointX(index);
     const y = height - padding.bottom - ((val.profit - minProfit) / range) * (height - padding.top - padding.bottom);
 
     if (index === 0) {
@@ -211,7 +265,7 @@ function renderChart() {
 
   ctx.fillStyle = '#2ac4b3';
   values.forEach((val, index) => {
-    const x = padding.left + ((width - padding.left - padding.right) / (values.length - 1)) * index;
+    const x = getPointX(index);
     const y = height - padding.bottom - ((val.profit - minProfit) / range) * (height - padding.top - padding.bottom);
     ctx.beginPath();
     ctx.arc(x, y, 3, 0, Math.PI * 2);
@@ -220,8 +274,8 @@ function renderChart() {
 
   ctx.fillStyle = '#7d8ea2';
   ctx.font = '11px sans-serif';
-  for (let i = 1; i <= 12; i += 1) {
-    const x = padding.left + ((width - padding.left - padding.right) / 12) * (i - 1);
+  for (let i = 1; i <= values.length; i += 1) {
+    const x = padding.left + ((width - padding.left - padding.right) / Math.max(values.length - 1, 1)) * (i - 1);
     ctx.fillText(getXAxisLabel(unit, i), x - 10, height - 8);
   }
 
