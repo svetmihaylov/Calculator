@@ -11,6 +11,13 @@ const state = {
 
 const languageSelect = document.getElementById('languageSelect');
 const timeUnitSelect = document.getElementById('timeUnitSelect');
+const currencySelect = document.getElementById('currencySelect');
+
+const currencyRates = {
+  USD: 1,
+  EUR: 0.92,
+  GBP: 0.79
+};
 
 function getCurrentLocale() {
   return languageSelect && languageSelect.value ? languageSelect.value : 'en';
@@ -47,8 +54,27 @@ languageSelect?.addEventListener('change', (event) => {
 });
 
 timeUnitSelect?.addEventListener('change', () => {
+  updateTimeUnitText();
   renderChart();
 });
+
+currencySelect?.addEventListener('change', () => {
+  updateSummary();
+});
+
+function updateTimeUnitText() {
+  const unit = timeUnitSelect ? timeUnitSelect.value : 'week';
+  const label = document.getElementById('profitTimeLabel');
+  const atLabel = document.getElementById('atTimeLabel');
+
+  if (label) {
+    label.textContent = `Profit in ${unit} #1`;
+  }
+
+  if (atLabel) {
+    atLabel.textContent = `At ${unit} #12:`;
+  }
+}
 
 function getXAxisLabel(unit, index) {
   const locale = getCurrentLocale();
@@ -75,6 +101,7 @@ const refs = {
   customersSummary: document.getElementById('customersSummary'),
   revenueSummary: document.getElementById('revenueSummary'),
   expensesSummary: document.getElementById('expensesSummary'),
+  headlineProfitTotal: document.getElementById('headlineProfitTotal'),
   profitSummary: document.getElementById('profitSummary'),
   retentionSummary: document.getElementById('retentionSummary'),
   roiSummary: document.getElementById('roiSummary')
@@ -84,12 +111,16 @@ const chartCanvas = document.getElementById('performanceChart');
 const ctx = chartCanvas.getContext('2d');
 
 function formatMoney(value) {
+  const currency = currencySelect ? currencySelect.value : 'USD';
+  const rate = currencyRates[currency] || 1;
+  const converted = value * rate;
+
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }).format(value);
+  }).format(converted);
 }
 
 function formatPercent(value) {
@@ -118,6 +149,7 @@ function updateSummary() {
   refs.customersSummary.textContent = customers.toLocaleString('en-US');
   refs.revenueSummary.textContent = formatMoney(revenue);
   refs.expensesSummary.textContent = formatMoney(expenses);
+  refs.headlineProfitTotal.textContent = formatMoney(profit);
   refs.profitSummary.textContent = formatMoney(profit);
   refs.retentionSummary.textContent = formatPercent(retention);
   refs.roiSummary.textContent = formatPercent(roi / 100);
@@ -269,6 +301,7 @@ function initSliders() {
 
 window.addEventListener('resize', renderChart);
 applyTranslations(getCurrentLocale());
+updateTimeUnitText();
 initSliders();
 updateSummary();
 renderChart();

@@ -53,10 +53,10 @@
             <div class="field">
               <label data-i18n="currencyLabel">Currency</label>
               <div class="select-wrap">
-                <select>
-                  <option value="usd" selected data-i18n="usd">USD</option>
-                  <option value="eur" data-i18n="eur">EUR</option>
-                  <option value="gbp" data-i18n="gbp">GBP</option>
+                <select id="currencySelect">
+                  <option value="USD" selected data-i18n="usd">USD</option>
+                  <option value="EUR" data-i18n="eur">EUR</option>
+                  <option value="GBP" data-i18n="gbp">GBP</option>
                 </select>
               </div>
             </div>
@@ -186,13 +186,13 @@
           </div>
 
           <div class="summary-box">
-            <p class="summary-label" data-i18n="profitWeek">Profit in week #1</p>
-            <div class="profit-total">$30,865.61</div>
+            <p class="summary-label" id="profitTimeLabel" data-i18n="profitWeek">Profit in week #1</p>
+            <div class="profit-total" id="headlineProfitTotal">$30,865.61</div>
           </div>
 
           <div class="summary-grid">
             <div class="summary-row">
-              <span data-i18n="atWeek">At week #12:</span>
+              <span id="atTimeLabel" data-i18n="atWeek">At week #12:</span>
             </div>
             <div class="summary-row">
               <span data-i18n="customersShort">Customers:</span>
@@ -235,9 +235,6 @@
       </div>
     </div>
 
-    <script src="lang/en.js"></script>
-    <script src="lang/es.js"></script>
-    <script src="lang/fr.js"></script>
     <script src="lang/en.js"></script>
     <script src="lang/es.js"></script>
     <script src="lang/fr.js"></script>
