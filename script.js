@@ -13,6 +13,9 @@ const languageSelect = document.getElementById('languageSelect');
 const timeUnitSelect = document.getElementById('timeUnitSelect');
 const currencySelect = document.getElementById('currencySelect');
 const periodsInput = document.getElementById('periodsInput');
+const exportDataButton = document.getElementById('exportDataButton');
+const loadDataButton = document.getElementById('loadDataButton');
+const loadDataInput = document.getElementById('loadDataInput');
 
 const currencyRates = {
   USD: 1,
@@ -69,6 +72,77 @@ currencySelect?.addEventListener('change', () => {
 periodsInput?.addEventListener('input', () => {
   updateSummary();
   renderChart();
+});
+
+exportDataButton?.addEventListener('click', () => {
+  const data = {
+    state,
+    settings: {
+      language: languageSelect?.value || 'en',
+      timeUnit: timeUnitSelect?.value || 'week',
+      periods: periodsInput?.value || '12',
+      currency: currencySelect?.value || 'USD'
+    }
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'results-predictor-data.json';
+  document.body.appendChild(link);
+  link.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(link.href);
+    link.remove();
+  }, 0);
+});
+
+loadDataButton?.addEventListener('click', () => {
+  loadDataInput?.click();
+});
+
+loadDataInput?.addEventListener('change', async (event) => {
+  const [file] = event.target.files;
+  if (!file) return;
+
+  try {
+    const data = JSON.parse(await file.text());
+    const stateKeys = Object.keys(state);
+    if (!data.state || stateKeys.some((key) => !Number.isFinite(Number(data.state[key])))) {
+      throw new Error('Invalid calculator data');
+    }
+
+    stateKeys.forEach((key) => {
+      state[key] = Number(data.state[key]);
+      const slider = document.querySelector(`input[data-key="${key}"]`);
+      if (slider) {
+        slider.value = state[key];
+        setSliderFill(slider);
+        updateReadout(key, state[key]);
+      }
+    });
+
+    const settings = data.settings || {};
+    if (languageSelect && ['en', 'es', 'fr'].includes(settings.language)) {
+      languageSelect.value = settings.language;
+      applyTranslations(settings.language);
+    }
+    if (timeUnitSelect && ['day', 'week', 'month'].includes(settings.timeUnit)) {
+      timeUnitSelect.value = settings.timeUnit;
+    }
+    if (periodsInput && Number.isFinite(Number(settings.periods))) {
+      periodsInput.value = Math.min(24, Math.max(1, Number(settings.periods)));
+    }
+    if (currencySelect && ['USD', 'EUR', 'GBP'].includes(settings.currency)) {
+      currencySelect.value = settings.currency;
+    }
+
+    updateSummary();
+    renderChart();
+  } catch (error) {
+    window.alert('Could not load calculator data.');
+  } finally {
+    event.target.value = '';
+  }
 });
 
 function getXAxisLabel(unit, index) {
@@ -300,7 +374,7 @@ function updateReadout(key, value) {
     startingCost: 'startingCostValue'
   };
 
-  const target = refs[labelMap[key]];
+  const target = document.getElementById(labelMap[key]);
   if (!target) return;
 
   const formatMap = {
