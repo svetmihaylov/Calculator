@@ -9,6 +9,27 @@ const state = {
   startingCost: 0
 };
 
+const languageSelect = document.getElementById('languageSelect');
+
+function applyTranslations(locale) {
+  const pack = window.langPack && window.langPack[locale] ? window.langPack[locale] : window.langPack.en;
+
+  document.querySelectorAll('[data-i18n]').forEach((node) => {
+    const key = node.dataset.i18n;
+    if (pack[key]) {
+      node.textContent = pack[key];
+    }
+  });
+
+  if (languageSelect) {
+    languageSelect.value = locale;
+  }
+}
+
+languageSelect?.addEventListener('change', (event) => {
+  applyTranslations(event.target.value);
+});
+
 const refs = {
   launchingCustomers: document.getElementById('launchingCustomersValue'),
   revenuePerConversion: document.getElementById('revenuePerConversionValue'),
