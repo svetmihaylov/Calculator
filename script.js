@@ -11,6 +11,13 @@ const state = {
 
 const languageSelect = document.getElementById('languageSelect');
 const timeUnitSelect = document.getElementById('timeUnitSelect');
+const currencySelect = document.getElementById('currencySelect');
+
+const currencyRates = {
+  USD: 1,
+  EUR: 0.92,
+  GBP: 0.79
+};
 
 function getCurrentLocale() {
   return languageSelect && languageSelect.value ? languageSelect.value : 'en';
@@ -50,6 +57,10 @@ timeUnitSelect?.addEventListener('change', () => {
   renderChart();
 });
 
+currencySelect?.addEventListener('change', () => {
+  updateSummary();
+});
+
 function getXAxisLabel(unit, index) {
   const locale = getCurrentLocale();
   const pack = window.langPack && window.langPack[locale] ? window.langPack[locale] : window.langPack.en;
@@ -84,12 +95,16 @@ const chartCanvas = document.getElementById('performanceChart');
 const ctx = chartCanvas.getContext('2d');
 
 function formatMoney(value) {
+  const currency = currencySelect ? currencySelect.value : 'USD';
+  const rate = currencyRates[currency] || 1;
+  const converted = value * rate;
+
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }).format(value);
+  }).format(converted);
 }
 
 function formatPercent(value) {
