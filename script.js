@@ -10,6 +10,11 @@ const state = {
 };
 
 const languageSelect = document.getElementById('languageSelect');
+const timeUnitSelect = document.getElementById('timeUnitSelect');
+
+function getCurrentLocale() {
+  return languageSelect && languageSelect.value ? languageSelect.value : 'en';
+}
 
 function applyTranslations(locale) {
   const pack = window.langPack && window.langPack[locale] ? window.langPack[locale] : window.langPack.en;
@@ -24,11 +29,39 @@ function applyTranslations(locale) {
   if (languageSelect) {
     languageSelect.value = locale;
   }
+
+  if (timeUnitSelect) {
+    const unit = timeUnitSelect.value || 'week';
+    document.querySelectorAll('#timeUnitSelect option').forEach((option) => {
+      const key = option.value;
+      if (pack[key]) {
+        option.textContent = pack[key];
+      }
+    });
+    timeUnitSelect.value = unit;
+  }
 }
 
 languageSelect?.addEventListener('change', (event) => {
   applyTranslations(event.target.value);
 });
+
+timeUnitSelect?.addEventListener('change', () => {
+  renderChart();
+});
+
+function getXAxisLabel(unit, index) {
+  const locale = getCurrentLocale();
+  const pack = window.langPack && window.langPack[locale] ? window.langPack[locale] : window.langPack.en;
+  const labelMap = {
+    week: pack.week || 'Week',
+    month: pack.month || 'Month',
+    day: pack.day || 'Day'
+  };
+
+  const name = labelMap[unit] || 'Week';
+  return `${name} ${index}`;
+}
 
 const refs = {
   launchingCustomers: document.getElementById('launchingCustomersValue'),
@@ -115,6 +148,7 @@ function renderChart() {
   const width = chartCanvas.width;
   const height = chartCanvas.height;
   const padding = { top: 15, right: 12, bottom: 28, left: 28 };
+  const unit = timeUnitSelect ? timeUnitSelect.value : 'week';
 
   ctx.clearRect(0, 0, width, height);
 
@@ -173,7 +207,7 @@ function renderChart() {
   ctx.font = '11px sans-serif';
   for (let i = 1; i <= 12; i += 1) {
     const x = padding.left + ((width - padding.left - padding.right) / 12) * (i - 1);
-    ctx.fillText(String(i), x - 2, height - 8);
+    ctx.fillText(getXAxisLabel(unit, i), x - 10, height - 8);
   }
 
   ctx.save();
@@ -234,6 +268,7 @@ function initSliders() {
 }
 
 window.addEventListener('resize', renderChart);
+applyTranslations(getCurrentLocale());
 initSliders();
 updateSummary();
 renderChart();
