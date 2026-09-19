@@ -179,7 +179,18 @@ function updateReadout(key, value) {
   const target = refs[labelMap[key]];
   if (!target) return;
 
-  target.textContent = Number.isInteger(value) ? value : Number(value).toFixed(2);
+  const formatMap = {
+    customerGrowthRate: Number(value).toFixed(2),
+    averageResponseRate: Number(value).toFixed(2),
+    customerChurnRate: Number(value).toFixed(2),
+    variableCost: Number(value).toFixed(1),
+    launchingCustomers: String(Math.round(value)),
+    revenuePerConversion: String(Math.round(value)),
+    fixedCosts: String(Math.round(value)),
+    startingCost: String(Math.round(value))
+  };
+
+  target.textContent = formatMap[key] ?? String(value);
 }
 
 function bindSlider(input) {
@@ -194,7 +205,7 @@ function bindSlider(input) {
 
 function initSliders() {
   document.querySelectorAll('input[type="range"]').forEach((slider) => {
-    setSliderFill(slider);
+    bindSlider(slider);
     slider.addEventListener('input', (event) => {
       bindSlider(event.target);
     });
